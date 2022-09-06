@@ -30,7 +30,7 @@ class Mist: SKScene {
     
     func playRain() -> Void {
         let rain_node = SKSpriteNode(color: UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 1), size: CGSize(width: 3, height: 50))
-        rain_node.position = CGPoint(x: Units.random(from: -screen_width, to: screen_width), y: screen_height)
+        rain_node.position = CGPoint(x: Utilities.random(from: -screen_width, to: screen_width), y: screen_height)
         
         addChild(rain_node)
         

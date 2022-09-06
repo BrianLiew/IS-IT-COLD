@@ -1,6 +1,6 @@
 import Foundation
 
-class Units {
+struct Utilities {
     
     static func convertKelvinToFahrenheit(input: Double) -> Double { return ((input - 273.15) * 1.8 + 32) }
 

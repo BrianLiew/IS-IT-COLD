@@ -1,7 +1,7 @@
 import Foundation
 
-struct weather_data: Codable {
-    var current: current
+struct WeatherData: Codable {
+    var current: Current
     var hourly: [Hourly]
     var daily: [Daily]
     
@@ -9,7 +9,7 @@ struct weather_data: Codable {
     mutating func set_description(description: String) -> Void { current.weather[0].main = description }
 }
 
-struct current: Codable {
+struct Current: Codable {
     var dt: Int
     var temp: Double
     var weather: [Weather]
@@ -29,11 +29,11 @@ struct Daily: Codable {
     var sunset: Int
     var moonrise: Int
     var moonset: Int
-    var temp: temp
+    var temp: Temp
     var weather: [Weather]
 }
 
-struct temp: Codable {
+struct Temp: Codable {
     var min: Double
     var max: Double
 }

@@ -12,25 +12,44 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.distanceFilter = 500
         manager.requestWhenInUseAuthorization()
+        
+        self.fetchLocalWeatherData()
     }
     
-    func fetchLocalWeatherData() -> Void { DispatchQueue.main.async { self.manager.startUpdatingLocation() } }
+    func fetchLocalWeatherData() -> Void {
+        print("fetchLocalWeatherData called")
+        DispatchQueue.main.async {
+            self.manager.startUpdatingLocation()
+        }
+    }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else {
-            let nserror = NSError()
-            fatalError("LocationManager didUpdateLocations | \(nserror): \(nserror.localizedDescription)")
+            NSLog("LocationManager didUpdateLocations | Could not fetch location, app exited with code 0")
+            exit(0)
         }
         location.fetchCityAndCountry { city, country, error in
             guard let city = city, let country = country, error == nil else {
-                guard let error_unwrapped = error else { fatalError("Unresolved error failed to unwrap error into error_unwrapped") }
-                let nserror = error_unwrapped as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)") }
+                if let error = error {
+                    NSLog("LocationManager didUpdateLocations | Failed to fetch city and county, error: \(String(describing: error))")
+                }
+                NotificationCenter.default.post(
+                    name: Notifications.location_fetched,
+                    object: nil
+                )
+                return
+            }
                         
-            AllData.city = city
-            AllData.country = country
+            DataObject.city = city
+            DataObject.country = country
+            DataObject.latitude = location.coordinate.latitude
+            DataObject.longitude = location.coordinate.longitude
                         
-            NetworkingManager.makeRequest(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude, completion_handler: ViewController.parseJSON)
+            NotificationCenter.default.post(
+                name: Notifications.location_fetched,
+                object: nil
+            )
+            return
         }
     }
     
