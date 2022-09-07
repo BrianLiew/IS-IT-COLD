@@ -7,16 +7,16 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     override init() {
         super.init()
-        
+                
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.distanceFilter = 500
         manager.requestWhenInUseAuthorization()
         
-        self.fetchLocalWeatherData()
+        addObserver()
     }
     
-    func fetchLocalWeatherData() -> Void {
+    @objc func fetchLocalWeatherData() -> Void {
         print("fetchLocalWeatherData called")
         DispatchQueue.main.async {
             self.manager.startUpdatingLocation()
@@ -64,6 +64,20 @@ extension CLLocation {
     
     func fetchCityAndCountry(completion: @escaping (_ city: String?, _ country:  String?, _ error: Error?) -> ()) {
         CLGeocoder().reverseGeocodeLocation(self) { completion($0?.first?.locality, $0?.first?.country, $1) }
+    }
+    
+}
+
+extension LocationManager {
+    
+    func addObserver() -> Void {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(fetchLocalWeatherData),
+            name: Notifications.view_did_load,
+            object: nil
+        )
+        return
     }
     
 }

@@ -1,29 +1,6 @@
 import Foundation
 import UIKit
 
-/*
-class IconsManager {
-    
-    static func cacheIcons(data: WeatherData) -> Void {
-        for index in 0...23 {
-            if (DataObject.icon_cache_status[data.hourly[index].weather[0].icon] == false) {
-                DataObject.icons[data.hourly[index].weather[0].icon] = UIImage(data: try! Data(contentsOf: URL(string: "http://openweathermap.org/img/wn/\(data.hourly[index].weather[0].icon)@2x.png")!))!
-                DataObject.icon_cache_status[data.hourly[index].weather[0].icon] = true
-            }
-            DataObject.hourly_images[index] = DataObject.icons[String(data.hourly[index].weather[0].icon)]!
-        }
-        for index in 0...6 {
-            if (DataObject.icon_cache_status[data.daily[index].weather[0].icon] == false) {
-                DataObject.icons[data.daily[index].weather[0].icon] = UIImage(data: try! Data(contentsOf: URL(string: "http://openweathermap.org/img/wn/\(data.daily[index].weather[0].icon)@2x.png")!))!
-                DataObject.icon_cache_status[data.daily[index].weather[0].icon] = true
-            }
-            DataObject.daily_images[index] = DataObject.icons[String(data.daily[index].weather[0].icon)]!
-        }
-    }
-    
-}
-*/
-
 class IconsManager {
     
     static let file_manager = FileManager.default
@@ -80,6 +57,7 @@ class IconsManager {
         }
         else {
             NSLog("IconsManager saveImage(:String, :UIImage) | Image not saved, could not be converted from UIImage to Data")
+            return
         }
     }
     

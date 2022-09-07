@@ -37,7 +37,7 @@ class NetworkingManager {
                 guard (response as? HTTPURLResponse)?.statusCode == 200
                 else {
                     NSLog("NetworkingManager request | HTTPURLResponse.status code != 200, app exited with code 0")
-                    exit(0)
+                    return
                 }
                 if let data = data { DataObject.updateData(json: data) }
                 else {

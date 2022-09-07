@@ -17,10 +17,10 @@ struct DataObject {
     
     static var hourly: [Hourly] = Array(repeating:
                                                 Hourly(
-                                                    dt: 0,
-                                                    temp: 0,
-                                                    wind_speed: 0,
-                                                    wind_deg: 0,
+                                                    dt: nil,
+                                                    temp: nil,
+                                                    wind_speed: nil,
+                                                    wind_deg: nil,
                                                     weather: [
                                                         Weather(
                                                             main: "",
@@ -30,14 +30,14 @@ struct DataObject {
                                              count: 24)
     
     static var daily: [Daily] = Array(repeating: Daily(
-                                                        dt: 0,
-                                                        sunrise: 0,
-                                                        sunset: 0,
-                                                        moonrise: 0,
-                                                        moonset: 0,
+                                                        dt: nil,
+                                                        sunrise: nil,
+                                                        sunset: nil,
+                                                        moonrise: nil,
+                                                        moonset: nil,
                                                         temp: Temp(
-                                                            min: 0,
-                                                            max: 0),
+                                                            min: nil,
+                                                            max: nil),
                                                         weather: [
                                                             Weather(
                                                                 main: "",
@@ -45,9 +45,6 @@ struct DataObject {
                                                                 icon: ""
                                                             )]),
                                             count: 7)
-    
-    static var hourly_images: [UIImage] = Array(repeating: UIImage(), count: 24)
-    static var daily_images: [UIImage] = Array(repeating: UIImage(), count: 7)
     
     static var icons: [String: UIImage?] = [
         "01d": nil,
@@ -69,36 +66,30 @@ struct DataObject {
         "13n": nil,
         "50n": nil
     ]
-    static var icon_cache_status: [String: Bool] = [
-        "01d": false,
-        "02d": false,
-        "03d": false,
-        "04d": false,
-        "09d": false,
-        "10d": false,
-        "11d": false,
-        "13d": false,
-        "50d": false,
-        "01n": false,
-        "02n": false,
-        "03n": false,
-        "04n": false,
-        "09n": false,
-        "10n": false,
-        "11n": false,
-        "13n": false,
-        "50n": false
-    ]
     
     static func updateData(json: Data?) -> Void {
         if let json = json {
             DispatchQueue.main.async {
                 let data = try? DataObject.decoder.decode(WeatherData.self, from: json)
                 if let data = data {
-                    DataObject.condition = data.current.weather[0].main
-                    DataObject.temperature = data.current.temp
-                    DataObject.hourly = data.hourly
-                    DataObject.daily = data.daily
+                    if let current = data.current, let hourly = data.hourly, let daily = data.daily {
+                        if let weather = current.weather, let temperature = current.temp {
+                            if let main = weather[0].main {
+                                DataObject.condition = main
+                            }
+                            if let code = weather[0].icon {
+                                if (code.hasSuffix("n")) {
+                                    NotificationCenter.default.post(
+                                        name: Notifications.nighttime_determined,
+                                        object: nil
+                                    )
+                                }
+                            }
+                            DataObject.temperature = temperature
+                        }
+                        DataObject.hourly = hourly
+                        DataObject.daily = daily
+                    }
                 }
                 /*
                  Notifies:

@@ -20,12 +20,6 @@ class ViewController: UIViewController {
         return view
     }()
     
-    private let condition_imageView: UIImageView = {
-        let view = UIImageView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
     private let animation_SKView = SKView(frame: CGRect(x: 0, y: 0, width: screen_width, height: screen_height))
     private let animation_UIView = UIView(frame: CGRect(x: 0, y: 0, width: screen_width, height: screen_height))
     
@@ -33,19 +27,17 @@ class ViewController: UIViewController {
     
     private let hourly_view: UITableView = {
         let view = UITableView()
-        view.register(UITableViewCell.self, forCellReuseIdentifier: "hourly")
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 10
-        view.showsHorizontalScrollIndicator = false
+        view.showsVerticalScrollIndicator = false
         return view
     }()
     
     private let daily_view: UITableView = {
         let view = UITableView()
-        view.register(UITableViewCell.self, forCellReuseIdentifier: "daily")
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 10
-        view.showsHorizontalScrollIndicator = false
+        view.showsVerticalScrollIndicator = false
         return view
     }()
     
@@ -93,15 +85,14 @@ class ViewController: UIViewController {
     override var shouldAutorotate: Bool { return false }
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask { return .portrait }
     override var prefersStatusBarHidden: Bool { return true }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         initializeUI()
-        
         addObservers()
         
-        self.location_manager.fetchLocalWeatherData()
+        NotificationCenter.default.post(name: Notifications.view_did_load, object: nil)
     }
     
     func initializeUI() -> Void {
@@ -115,10 +106,10 @@ class ViewController: UIViewController {
         temperature_label.textAlignment = .center
         wind_label.textAlignment = .center
         
-        location_label.font = Fonts.header_font
-        condition_label.font = Fonts.title_font
-        temperature_label.font = Fonts.body_font
-        wind_label.font = Fonts.body_font
+        location_label.font = StyleManager.Fonts.system.getFont(size: StyleManager.Fonts.Size.large)
+        condition_label.font = StyleManager.Fonts.system.getFont(size: StyleManager.Fonts.Size.extra_large)
+        temperature_label.font = StyleManager.Fonts.system.getFont(size: StyleManager.Fonts.Size.large)
+        wind_label.font = StyleManager.Fonts.system.getFont(size: StyleManager.Fonts.Size.large)
                         
         hourly_view.dataSource = self
         hourly_view.delegate = self
@@ -131,7 +122,6 @@ class ViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(animation_SKView)
         scrollView.addSubview(animation_UIView)
-        scrollView.addSubview(condition_imageView)
         scrollView.addSubview(location_label)
         scrollView.addSubview(condition_label)
         scrollView.addSubview(temperature_label)
@@ -169,26 +159,19 @@ class ViewController: UIViewController {
             location_label.bottomAnchor.constraint(equalTo: condition_label.topAnchor),
             location_label.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             location_label.trailingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            
-            condition_imageView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.5),
-            condition_imageView.heightAnchor.constraint(equalTo: scrollView.heightAnchor, multiplier: 0.2),
-            condition_imageView.topAnchor.constraint(equalTo: location_label.bottomAnchor),
-            condition_imageView.bottomAnchor.constraint(equalTo: wind_label.topAnchor),
-            condition_imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            condition_imageView.trailingAnchor.constraint(equalTo: condition_label.leadingAnchor),
 
-            condition_label.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.5),
-            condition_label.heightAnchor.constraint(equalTo: scrollView.heightAnchor, multiplier: 0.2),
+            condition_label.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.8),
+            condition_label.heightAnchor.constraint(equalTo: scrollView.heightAnchor, multiplier: 0.1),
             condition_label.topAnchor.constraint(equalTo: location_label.bottomAnchor),
             condition_label.bottomAnchor.constraint(equalTo: wind_label.topAnchor),
-            condition_label.leadingAnchor.constraint(equalTo: condition_imageView.trailingAnchor),
-            condition_label.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            condition_label.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: CGFloat(screen_width * 0.1)),
+            condition_label.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: CGFloat(screen_width * 0.1)),
 
-            temperature_label.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.5),
+            temperature_label.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.3),
             temperature_label.heightAnchor.constraint(equalTo: scrollView.heightAnchor, multiplier: 0.1),
-            temperature_label.topAnchor.constraint(equalTo: condition_imageView.bottomAnchor),
+            temperature_label.topAnchor.constraint(equalTo: condition_label.bottomAnchor),
             temperature_label.bottomAnchor.constraint(equalTo: hourly_view.topAnchor),
-            temperature_label.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            temperature_label.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: CGFloat(screen_width * 0.1)),
             temperature_label.trailingAnchor.constraint(equalTo: wind_label.leadingAnchor),
             
             wind_label.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.5),
@@ -196,41 +179,60 @@ class ViewController: UIViewController {
             wind_label.topAnchor.constraint(equalTo: condition_label.bottomAnchor),
             wind_label.bottomAnchor.constraint(equalTo: hourly_view.topAnchor),
             wind_label.leadingAnchor.constraint(equalTo: temperature_label.trailingAnchor),
-            wind_label.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            wind_label.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: CGFloat(screen_width * 0.1)),
             
-            hourly_view.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.85),
-            hourly_view.heightAnchor.constraint(equalTo: scrollView.heightAnchor, multiplier: 0.3),
+            hourly_view.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.8),
+            hourly_view.heightAnchor.constraint(equalTo: scrollView.heightAnchor, multiplier: 0.25),
             hourly_view.topAnchor.constraint(equalTo: temperature_label.bottomAnchor),
             hourly_view.bottomAnchor.constraint(equalTo: daily_view.topAnchor, constant: -25),
-            hourly_view.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: CGFloat(screen_width * 0.075)),
-            hourly_view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            hourly_view.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: CGFloat(screen_width * 0.1)),
+            hourly_view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: CGFloat(screen_width * 0.1)),
             
-            daily_view.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.85),
-            daily_view.heightAnchor.constraint(equalTo: scrollView.heightAnchor, multiplier: 0.3),
+            daily_view.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 0.8),
+            daily_view.heightAnchor.constraint(equalTo: scrollView.heightAnchor, multiplier: 0.25),
             daily_view.topAnchor.constraint(equalTo: hourly_view.bottomAnchor, constant: 25),
             daily_view.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            daily_view.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: CGFloat(screen_width * 0.075)),
-            daily_view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
+            daily_view.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: CGFloat(screen_width * 0.1)),
+            daily_view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: CGFloat(screen_width * 0.1))
         ])
         
         return
     }
     
     @objc func updateUI() -> Void {
+        self.updateLocationText()
+        self.updateWeatherText()
+        hourly_view.reloadData()
+        daily_view.reloadData()
+    }
+    
+    private func updateLocationText() -> Void {
         if let city = DataObject.city, let country = DataObject.country {
             self.location_label.text = "\(city), \(country)"
         }
-        if let image = DataObject.icons[DataObject.hourly[0].weather[0].icon] {
-            self.condition_imageView.image = image
-        }
-        self.condition_label.text = DataObject.hourly[0].weather[0].main
-        if let temperature = DataObject.temperature {
+        return
+    }
+    
+    private func updateWeatherText() -> Void {
+        if let current = DataObject.hourly[0].weather,
+           let temperature = DataObject.temperature,
+           let wind_speed = DataObject.hourly[0].wind_speed,
+           let wind_deg = DataObject.hourly[0].wind_deg
+        {
+            if let condition = current[0].main {
+                self.condition_label.text = condition
+            }
             self.temperature_label.text = String(format: "%.1f", Utilities.convertKelvinToFahrenheit(input: temperature)) + "°F"
+            self.wind_label.text = "\(wind_speed)mph \(Utilities.convertDegreesToDirection(input: wind_deg))"
         }
-        self.wind_label.text = "\(DataObject.hourly[0].wind_speed) \(Utilities.convertDegreesToDirection(input: DataObject.hourly[0].wind_deg))"
-        
-        hourly_view.reloadData()
-        daily_view.reloadData()
+    }
+    
+    @objc private func convertWhiteText() -> Void {
+        self.location_label.textColor = StyleManager.Color.white.getColor()
+        self.condition_label.textColor = StyleManager.Color.white.getColor()
+        self.temperature_label.textColor = StyleManager.Color.white.getColor()
+        self.wind_label.textColor = StyleManager.Color.white.getColor()
+        return
     }
     
 }
@@ -254,30 +256,97 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         if (tableView == self.hourly_view) {
             var content = cell.defaultContentConfiguration()
             
-            content.image = DataObject.hourly_images[indexPath.row]
+            content.text = retrieveHourlyContentText(index: indexPath.row)
+            content.secondaryText = retrieveHourlySecondaryText(index: indexPath.row)
+            content.textProperties.font = StyleManager.Fonts.system.getFont(size: StyleManager.Fonts.Size.small)
+            content.secondaryTextProperties.font = StyleManager.Fonts.system.getFont(size: StyleManager.Fonts.Size.small)
             content.imageProperties.maximumSize = CGSize(width: 50, height: 50)
-            content.text = String(format: "%.1f", Utilities.convertKelvinToFahrenheit(input: DataObject.hourly[indexPath.row].temp)) + "°F"
-            content.secondaryText = "\(Time.timeFormatter(current_time: Double(DataObject.hourly[indexPath.row].dt)))"
-
-            content.textProperties.font = Fonts.cell_font
-            content.secondaryTextProperties.font = Fonts.secondary_cell_font
+            if let image = retrieveHourlyIcon(index: indexPath.row) {
+                content.image = image
+            }
 
             cell.contentConfiguration = content
         }
         else if (tableView == self.daily_view) {
             var content = cell.defaultContentConfiguration()
             
-            content.text = String(format: "%.1f", Utilities.convertKelvinToFahrenheit(input: DataObject.daily[indexPath.row].temp.min)) +  "°F ~ " + String(format: "%.1f", Utilities.convertKelvinToFahrenheit(input: DataObject.daily[indexPath.row].temp.max)) + "°F"
-            content.secondaryText = "\(Time.dateFormatter(current_time: Double(DataObject.daily[indexPath.row].dt)))"
-            content.textProperties.font = Fonts.cell_font
-            content.secondaryTextProperties.font = Fonts.secondary_cell_font
-            content.image = DataObject.daily_images[indexPath.row]
+            content.text = retrieveDailyContentText(index: indexPath.row)
+            content.secondaryText = retrieveDailySecondaryText(index: indexPath.row)
+            content.textProperties.font = StyleManager.Fonts.system.getFont(size: StyleManager.Fonts.Size.small)
+            content.secondaryTextProperties.font = StyleManager.Fonts.system.getFont(size: StyleManager.Fonts.Size.small)
             content.imageProperties.maximumSize = CGSize(width: 50, height: 50)
+            if let image = retrieveDailyIcon(index: indexPath.row) {
+                content.image = image
+            }
             
             cell.contentConfiguration = content
         }
         
         return cell
+    }
+    
+    // MARK: - hourly_view utility functions
+    
+    private func retrieveHourlyContentText(index: Int) -> String {
+        if let temperature = DataObject.hourly[index].temp {
+            return String(format: "%.1f", Utilities.convertKelvinToFahrenheit(input: temperature)) + "°F"
+        }
+        else { return "" }
+    }
+    
+    private func retrieveHourlySecondaryText(index: Int) -> String {
+        if let time = DataObject.hourly[index].dt {
+            return "\(Utilities.timeFormatter(current_time: Double(time)))"
+        }
+        else { return "" }
+    }
+    
+    private func retrieveHourlyIcon(index: Int) -> UIImage? {
+        if let weather = DataObject.hourly[index].weather {
+            if let code = weather[0].icon {
+                if let image = DataObject.icons[code] {
+                    return image
+                }
+                else { return nil }
+            }
+            else { return nil }
+        }
+        else { return nil }
+    }
+    
+    // MARK: - daily_view utility functions
+    
+    private func retrieveDailyContentText(index: Int) -> String {
+        if let temperature = DataObject.daily[index].temp {
+            if let min_temp = temperature.min, let max_temp = temperature.max {
+                return
+                    String(format: "%.1f", Utilities.convertKelvinToFahrenheit(input: min_temp)) +
+                    "°F ~ " +
+                    String(format: "%.1f", Utilities.convertKelvinToFahrenheit(input: max_temp)) + "°F"
+            }
+            else { return "" }
+        }
+        else { return "" }
+    }
+    
+    private func retrieveDailySecondaryText(index: Int) -> String {
+        if let time = DataObject.daily[index].dt {
+            return "\(Utilities.dateFormatter(current_time: Double(time)))"
+        }
+        else { return "" }
+    }
+    
+    private func retrieveDailyIcon(index: Int) -> UIImage? {
+        if let weather = DataObject.daily[index].weather {
+            if let code = weather[0].icon {
+                if let image = DataObject.icons[code] {
+                    return image
+                }
+                else { return nil }
+            }
+            else { return nil }
+        }
+        else { return nil }
     }
     
     // MARK: - NotificationCenter
@@ -289,6 +358,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             name: Notifications.data_object_updated,
             object: nil
         )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(convertWhiteText),
+            name: Notifications.nighttime_determined,
+            object: nil)
     }
     
 }
