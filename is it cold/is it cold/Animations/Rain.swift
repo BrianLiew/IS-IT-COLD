@@ -1,13 +1,16 @@
 import SpriteKit
-import GameplayKit
 
 class Rain: SKScene {
     
     override func didMove(to view: SKView) {
+        NotificationCenter.default.post(
+            name: Notifications.nighttime_determined,
+            object: nil
+        )
+        
         run(SKAction.sequence([
             // background
             SKAction.colorize(with: SKColor(displayP3Red: 0, green: 0.25, blue: 0.5, alpha: 0.25), colorBlendFactor: 1.0, duration: 1.0),
-            SKAction.wait(forDuration: 0.25),
             // animation
             SKAction.repeat(SKAction.sequence([
                 SKAction.run(playRain),

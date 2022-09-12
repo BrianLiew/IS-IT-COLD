@@ -17,7 +17,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     @objc func fetchLocalWeatherData() -> Void {
-        print("fetchLocalWeatherData called")
         DispatchQueue.main.async {
             self.manager.startUpdatingLocation()
         }

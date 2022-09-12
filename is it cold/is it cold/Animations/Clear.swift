@@ -105,6 +105,11 @@ class Clear {
         
         view.layer.addSublayer(layer)
         view.layer.addSublayer(layer_2)
+        
+        NotificationCenter.default.post(
+            name: Notifications.nighttime_determined,
+            object: nil
+        )
     }
     
 }

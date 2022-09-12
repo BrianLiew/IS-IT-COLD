@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D3DD7AF128C088FB00945505 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DD7AF028C088FB00945505 /* Notifications.swift */; };
 		D3DD7AF328C6B81500945505 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DD7AF228C6B81500945505 /* ViewController.swift */; };
+		D3DD7AF728C8983600945505 /* CountryAbbreviations in Resources */ = {isa = PBXBuildFile; fileRef = D3DD7AF628C8983600945505 /* CountryAbbreviations */; };
 		F139D453281F3FC000D7A649 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139D452281F3FC000D7A649 /* LocationManager.swift */; };
 		F139D455281F4D8B00D7A649 /* AnimationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139D454281F4D8B00D7A649 /* AnimationManager.swift */; };
 		F139D457281F4E8E00D7A649 /* Clouds.swift in Sources */ = {isa = PBXBuildFile; fileRef = F139D456281F4E8E00D7A649 /* Clouds.swift */; };
@@ -38,9 +39,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D3494BBF28CEABF600D37D9B /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		D3DD7AF028C088FB00945505 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
 		D3DD7AF228C6B81500945505 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D3DD7AF428C7267E00945505 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D3DD7AF628C8983600945505 /* CountryAbbreviations */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CountryAbbreviations; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.json; };
 		F139D452281F3FC000D7A649 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		F139D454281F4D8B00D7A649 /* AnimationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationManager.swift; sourceTree = "<group>"; };
 		F139D456281F4E8E00D7A649 /* Clouds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clouds.swift; sourceTree = "<group>"; };
@@ -82,6 +85,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D3494BBE28CEABF600D37D9B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D3494BBF28CEABF600D37D9B /* SpriteKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D3DD7AF528C726DE00945505 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -99,6 +110,7 @@
 			children = (
 				F167A51427810B33000DC845 /* is it cold */,
 				F167A51327810B33000DC845 /* Products */,
+				D3494BBE28CEABF600D37D9B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -113,6 +125,7 @@
 		F167A51427810B33000DC845 /* is it cold */ = {
 			isa = PBXGroup;
 			children = (
+				D3DD7AF628C8983600945505 /* CountryAbbreviations */,
 				F167A5362781118E000DC845 /* is-it-cold-Info.plist */,
 				F167A51527810B33000DC845 /* AppDelegate.swift */,
 				F19FE2E027FFD8EF003DF3FF /* DataObject.swift */,
@@ -231,6 +244,7 @@
 				F167A52127810B33000DC845 /* Main.storyboard in Resources */,
 				F167A51827810B33000DC845 /* Rain.sks in Resources */,
 				F13BFBC12784CCBE004D6C72 /* Mist.sks in Resources */,
+				D3DD7AF728C8983600945505 /* CountryAbbreviations in Resources */,
 				F167A52327810B34000DC845 /* Assets.xcassets in Resources */,
 				F167A52627810B34000DC845 /* LaunchScreen.storyboard in Resources */,
 				F13BFBC52784CDC5004D6C72 /* ShowerRain.sks in Resources */,
@@ -414,12 +428,14 @@
 				DEVELOPMENT_TEAM = BPK4BTV343;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "is-it-cold-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "IS IT COLD";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Because I always want to know where you are";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Because I need to know where you are";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -446,12 +462,14 @@
 				DEVELOPMENT_TEAM = BPK4BTV343;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "is-it-cold-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "IS IT COLD";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Because I always want to know where you are";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Because I need to know where you are";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;

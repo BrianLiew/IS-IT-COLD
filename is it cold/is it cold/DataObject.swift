@@ -71,41 +71,39 @@ struct DataObject {
         if let json = json {
             DispatchQueue.main.async {
                 let data = try? DataObject.decoder.decode(WeatherData.self, from: json)
-                if let data = data {
-                    if let current = data.current, let hourly = data.hourly, let daily = data.daily {
-                        if let weather = current.weather, let temperature = current.temp {
-                            if let main = weather[0].main {
-                                DataObject.condition = main
-                            }
-                            if let code = weather[0].icon {
-                                if (code.hasSuffix("n")) {
-                                    NotificationCenter.default.post(
-                                        name: Notifications.nighttime_determined,
-                                        object: nil
-                                    )
-                                }
-                            }
-                            DataObject.temperature = temperature
-                        }
-                        DataObject.hourly = hourly
-                        DataObject.daily = daily
-                    }
+                if let data = data,
+                   let current = data.current,
+                   let hourly = data.hourly,
+                   let daily = data.daily,
+                   let weather = current.weather,
+                   let temperature = current.temp,
+                   let main = weather[0].main {
+                        DataObject.condition = main
+                        DataObject.temperature = temperature
+                    DataObject.hourly = hourly
+                    DataObject.daily = daily
+                    /*
+                     Notifies:
+                        * ViewController to update UI
+                        * AnimationManager to begin animation
+                        * IconsManager to begin caching icons
+                    */
+                    NotificationCenter.default.post(
+                        name: Notifications.data_object_updated,
+                        object: nil
+                    )
                 }
-                /*
-                 Notifies:
-                    * ViewController to update UI
-                    * AnimationManager to begin animation
-                    * IconsManager to begin caching icons
-                 */
-                NotificationCenter.default.post(
-                    name: Notifications.data_object_updated,
-                    object: nil
-                )
             }
-        } else {
+        }
+        else {
             NSLog("DataObject updateData | nil json value found when updating data, app exited with code 0")
             exit(0)
         }
+    }
+    
+    // DEBUG
+    static func setCondition(condition: String) -> Void {
+        DataObject.hourly[0].weather![0].main = condition
     }
     
 }

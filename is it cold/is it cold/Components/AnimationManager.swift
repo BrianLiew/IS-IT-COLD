@@ -14,13 +14,13 @@ class AnimationManager {
     }
     
     @objc func initiateAnimation() -> Void {
-        guard let weather = DataObject.hourly[0].weather
+        guard let weather = DataObject.hourly[0].weather, let condition = weather[0].main
         else {
-            NSLog("AnimationManager initiateAnimation | nil value for DataObject's 0 index weather property, no animation executed")
+            NSLog("AnimationManager initiateAnimation | nil value for DataObject's weather property or weather's main property, no animation executed")
             return
         }
                 
-        switch (weather[0].main) {
+        switch (condition) {
             case "Clear", "Few Clouds", "Broken Clouds", "Clouds":
                 if (weather[0].main == "Clear") {
                     if let code = weather[0].icon {
@@ -52,6 +52,7 @@ class AnimationManager {
                 }
             case "Snow":
                 if let scene = SKScene(fileNamed: "Snow") {
+                    print("case reached")
                     scene.scaleMode = .aspectFill
                     SKView.presentScene(scene)
                 }
@@ -67,7 +68,6 @@ class AnimationManager {
         // view.ignoresSiblingOrder = true
         // view.showsFPS = true
         // view.showsNodeCount = true
-
     }
     
 }

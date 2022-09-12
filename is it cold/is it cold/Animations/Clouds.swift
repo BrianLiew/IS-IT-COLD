@@ -4,6 +4,11 @@ import UIKit
 class Clouds {
  
     static func playClouds(view: UIView) -> Void {
+        NotificationCenter.default.post(
+            name: Notifications.nighttime_determined,
+            object: nil
+        )
+        
         let background = CAGradientLayer()
         background.frame = view.bounds
         background.colors = [

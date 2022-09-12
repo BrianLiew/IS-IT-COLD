@@ -1,9 +1,6 @@
+import Foundation
 import UIKit
 import SpriteKit
-import GameplayKit
-import CoreLocation
-import AddressBookUI
-import Foundation
 
 let screen_width = UIScreen.main.bounds.width
 let screen_height = UIScreen.main.bounds.height
@@ -28,15 +25,16 @@ class ViewController: UIViewController {
     private let hourly_view: UITableView = {
         let view = UITableView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = 30
         view.showsVerticalScrollIndicator = false
+        view.backgroundColor = UIColor.clear
         return view
     }()
     
     private let daily_view: UITableView = {
         let view = UITableView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = 30
         view.showsVerticalScrollIndicator = false
         return view
     }()
@@ -195,7 +193,6 @@ class ViewController: UIViewController {
             daily_view.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: CGFloat(screen_width * 0.1)),
             daily_view.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: CGFloat(screen_width * 0.1))
         ])
-        
         return
     }
     
@@ -302,14 +299,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     private func retrieveHourlyIcon(index: Int) -> UIImage? {
-        if let weather = DataObject.hourly[index].weather {
-            if let code = weather[0].icon {
-                if let image = DataObject.icons[code] {
-                    return image
-                }
-                else { return nil }
-            }
-            else { return nil }
+        if let weather = DataObject.hourly[index].weather,
+           let code = weather[0].icon,
+           let image = DataObject.icons[code] {
+                return image
         }
         else { return nil }
     }
@@ -317,14 +310,12 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     // MARK: - daily_view utility functions
     
     private func retrieveDailyContentText(index: Int) -> String {
-        if let temperature = DataObject.daily[index].temp {
-            if let min_temp = temperature.min, let max_temp = temperature.max {
+        if let temperature = DataObject.daily[index].temp,
+           let min_temp = temperature.min, let max_temp = temperature.max {
                 return
                     String(format: "%.1f", Utilities.convertKelvinToFahrenheit(input: min_temp)) +
                     "°F ~ " +
                     String(format: "%.1f", Utilities.convertKelvinToFahrenheit(input: max_temp)) + "°F"
-            }
-            else { return "" }
         }
         else { return "" }
     }
@@ -337,14 +328,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     private func retrieveDailyIcon(index: Int) -> UIImage? {
-        if let weather = DataObject.daily[index].weather {
-            if let code = weather[0].icon {
-                if let image = DataObject.icons[code] {
-                    return image
-                }
-                else { return nil }
-            }
-            else { return nil }
+        if let weather = DataObject.daily[index].weather,
+           let code = weather[0].icon,
+           let image = DataObject.icons[code] {
+            return image
         }
         else { return nil }
     }

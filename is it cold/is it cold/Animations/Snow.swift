@@ -1,13 +1,29 @@
 import SpriteKit
-import GameplayKit
 
 class Snow: SKScene {
     
     override func didMove(to view: SKView) {
+        NotificationCenter.default.post(
+            name: Notifications.nighttime_determined,
+            object: nil
+        )
+        
         run(SKAction.group([
             // background
             SKAction.colorize(with: SKColor(displayP3Red: 0, green: 0.25, blue: 0.5, alpha: 0.25), colorBlendFactor: 1.0, duration: 3.0),
             // snow animation
+            SKAction.group([
+                SKAction.run(playBigSnow),
+                SKAction.wait(forDuration: 0.5)
+            ]),
+            SKAction.group([
+                SKAction.run(playMediumSnow),
+                SKAction.wait(forDuration: 0.01)
+            ]),
+            SKAction.group([
+                SKAction.run(playSmallSnow),
+                SKAction.wait(forDuration: 0.005)
+            ]),
             SKAction.repeatForever(SKAction.sequence([
                 SKAction.group([
                     SKAction.run(playBigSnow),

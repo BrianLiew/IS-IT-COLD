@@ -1,5 +1,4 @@
 import Foundation
-import CoreLocation
 
 class NetworkingManager {
     
@@ -12,11 +11,11 @@ class NetworkingManager {
     }
 
     @objc func fetchWeatherData() -> Void {
-        let url = NetworkingManager.initURL()
+        let url = NetworkingManager.initializeURL()
         NetworkingManager.makeRequest(url: url)
     }
     
-    private static func initURL() -> URL {
+    private static func initializeURL() -> URL {
         guard let latitude = DataObject.latitude, let longitude = DataObject.longitude
         else {
             NSLog("NetworkingManager request | nil DataObject latitude and longitude values found when initializing URL, app exited with code 0")
