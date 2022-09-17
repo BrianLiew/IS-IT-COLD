@@ -19,7 +19,10 @@ class AnimationManager {
             NSLog("AnimationManager initiateAnimation | nil value for DataObject's weather property or weather's main property, no animation executed")
             return
         }
-                
+        
+        Clear.playNightClearSky(view: UIView)
+        return
+                        
         switch (condition) {
             case "Clear", "Few Clouds", "Broken Clouds", "Clouds":
                 if (weather[0].main == "Clear") {

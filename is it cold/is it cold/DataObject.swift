@@ -27,7 +27,7 @@ struct DataObject {
                                                             description: "",
                                                             icon: ""
                                                         )]),
-                                             count: 24)
+                                        count: 24)
     
     static var daily: [Daily] = Array(repeating: Daily(
                                                         dt: nil,
@@ -44,7 +44,7 @@ struct DataObject {
                                                                 description: "",
                                                                 icon: ""
                                                             )]),
-                                            count: 7)
+                                      count: 7)
     
     static var icons: [String: UIImage?] = [
         "01d": nil,

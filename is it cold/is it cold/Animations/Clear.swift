@@ -74,7 +74,7 @@ class Clear {
         layer_2.path = path_2.cgPath
         
         layer.position = CGPoint(x: 200, y: -screen_height / 3)
-        layer.fillColor = UIColor(red: 1, green: 1, blue: 0.8, alpha: 1).cgColor
+        layer.fillColor = UIColor(red: 1, green: 1, blue: 0.8, alpha: 0.5).cgColor
         layer_2.position = CGPoint(x: 200, y: -screen_height / 3)
         layer_2.fillColor = UIColor(red: 1, green: 1, blue: 0.8, alpha: 0.15).cgColor
         
